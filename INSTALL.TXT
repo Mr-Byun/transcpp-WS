@@ -1,0 +1,224 @@
+#################################################################################
+#                                                                               #
+#        Installation instructions for the Reinitz lab transcription model      #
+#                                                                               #
+#################################################################################
+
+
+Files Created
+__________________________________________________________________________________
+
+The Reinitz lab transcription model consists of several pieces of code that are
+used to fit the model to data and analyze the results. The following are 
+the binaries that are created:
+
+transcpp
+--------
+
+This interfaces the annealer and transcription code. Feed it an
+input xml file and it will add an output node with optimized parameters
+ 
+
+ptranscpp
+---------
+
+This is the parallel version of transcpp, using MPI. It will work
+like transcpp, but must be run with mpiexec
+ 
+
+scramble
+--------
+
+This scrambles the input parameters to generate a new set of parameters
+to anneal from
+ 
+
+unfold
+------
+
+This does the calculation on a set of model parameters and allows the
+user to specify the type of data table to generate
+ 
+
+test_moves
+----------
+
+This program will test the annealer's move generation on an input
+file to ensure there are no errors. 
+ 
+
+In addition to these binary programs, there are also options to compile interfaces
+to the model in R or matlab. Each of these uses will have separate requirements.
+
+
+Prerequisits
+__________________________________________________________________________________
+
+For any steps below that require environmental variables 
+
+Boost
+-----
+
+The transcription model relies on the Boost C++ libraries. These are available
+for free from "http://www.boost.org/users/download/#live". You will not need
+to compile these. Many linux installations include these by default and you will 
+not need to do anything. For example, on Ubuntu systems boost is in 
+usr/local/include, which is already in the search path for the g++ compiler. If 
+you do install Boost to a non-standard directory the transcription model will
+need to know where these are by setting the environmental variable
+BOOST_DIR to the location containing the folder "boost". i.e run:
+
+  export BOOST_DIR=/path/to/boost
+  
+For convenience, you may chose to put this line in your .bashrc file.
+
+
+libxml2
+-------
+
+If you do not intend to fit model parameters, you may skip this section.
+If you plan to run "transcpp" or "test_moves" then you will need libxml2 
+installed. This will be available on nearly all linux systems.
+
+
+neoParSA
+--------
+
+If you do not intend to fit model parameters, you may skip this section.
+If you plan to run "transcpp" or "test_moves" then you will need the parallel
+simulated annealing code, as well as an environmental variable PARSA_ROOT which
+specifies the root directory of the SA code. i.e. run:
+
+  export PARSA_ROOT=/path/to/neoParSA
+
+For convenience, you may chose to put this line in your .bashrc file. This code
+will need to be compiled separately. To compile neoParSA, see it's own 
+documentation.
+
+
+MPI
+---
+
+in progress
+
+
+R
+-
+
+If you do not with to use the R interface you may skip this section.
+If you plan to run the R interface you must have the R package "Rcpp". This
+can be installed by typing the following command from inside an R session:
+
+  install.packages("Rcpp")
+  
+Once this is installed, make sure that R is in your search path. You can verify
+that R is in your search path by typing:
+
+  which R
+  
+If If these do not return a directory, you must add it using
+
+  export PATH=/path/to/R:$PATH
+  
+If R requires a different version of the c++ compiler than the other files, you
+can chose to compile the R interface by setting the environmental variable
+R_COMPILER to the desired compiler.
+
+matlab
+------
+
+If you do not with to use the matlab interface you may skip this section.
+If you plan to use the matlab interface you must have matlab installed and in
+your search path. Make sure it is in your search path by running the commands
+
+  which matlab
+  which mex
+  
+If these do not return a directory you must add it to you PATH variable using
+
+  export PATH=/path/to/matlab/bin:$PATH
+  
+Matlab may require a different compiler than the one you have installed.
+You may check what compilers are compatible with your version of matlab by 
+their website (i.e. http://www.mathworks.com/support/compilers/R2015b/).
+If mex requires a different version of the c++ compiler than other versions, you
+can chose to compile the matlab interface by setting the environmental variable
+MATLAB_COMPILER to the desired compiler.
+
+
+Installation
+__________________________________________________________________________________
+
+
+transcpp, scramble, unfold, test_moves
+--------------------------------------
+
+To make these files, ensure that PARSA_ROOT and BOOST_DIR are set if necessary
+(see prerequisites). Then run the following command from the transcpp directory:
+
+  make all
+  
+Alternatively, you may make each separately using
+
+  make transcpp
+  make scramble
+  make unfold
+  make test_moves
+  
+To cleanup all object files, run
+
+  make clean
+  
+
+ptranscpp
+---------
+
+ptranscpp must be made with the mpic++ or mpicc compilers. Make sure you
+have MPI installed, then compile with
+
+  make CXX=mpic++ ptranscpp
+
+
+R
+-
+
+To install the R interface, first make sure that BOOST_DIR is set, if necessary,
+and that R is in your search path (see prerequisites). Then, install the interface
+by running the following command from the transcpp directory:
+
+  make Rtranscpp
+  
+If R requires a different compiler than the default, you can change it by setting
+the environmental variable R_COMPILER to your desired compiler. Alternatively, you
+can run:
+
+  make R_COMPILER=your_compiler Rtranscpp
+            - or -         
+  make CXX=your_compiler Rtranscpp
+  
+Once the R interface is intalled you may load it by starting an R session and 
+typing:
+
+  library(Rtranscpp)
+  
+  
+matlab
+------
+
+To install the matlab interface, first make sure that BOOST_DIR is set, if 
+necessary, and that matlab is in your search path(see prerequisites). Also, make
+sure your compiler version is compatible with matlab (see prerequisites). Then
+run
+
+  make matlab
+  
+If matlab requires a different compiler version than your default (check 
+prerequisits, http://www.mathworks.com/support/compilers/R2015b/), you may specify
+which compiler to use by setting the environmental variable MATLAB_COMPILER
+
+  make MATLAB_COMPILER=your_compiler matlab
+            - or -         
+  make CXX=your_compiler matlab
+  
+
+

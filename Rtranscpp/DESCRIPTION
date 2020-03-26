@@ -1,0 +1,11 @@
+Package: Rtranscpp
+Type: Package
+Title: R interface to Reinitz lab transcription model
+Version: 1.0
+Date: 2015-02-19
+Author: Kenneth Barr
+Maintainer: Kenneth Barr <barr@uchicago.edu>
+Description: R interface to Reinitz lab transcription model
+License: GPL (>= 2)
+Imports: colorspace, methods, Rcpp (>= 0.11.4)
+LinkingTo: Rcpp

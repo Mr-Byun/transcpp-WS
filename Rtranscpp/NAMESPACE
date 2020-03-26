@@ -1,0 +1,3 @@
+useDynLib(Rtranscpp)
+exportPattern("^[[:alpha:]]+")
+import(methods, Rcpp)
